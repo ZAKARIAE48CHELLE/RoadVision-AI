@@ -41,9 +41,9 @@ splits:
   train_ratio: 0.70
   val_ratio: 0.15
   test_ratio: 0.15
-  stratification_strategy: "class_and_country_balanced"
+  stratification_strategy: "multilabel_class_balanced"
   leakage_prevention:
-    group_by_sequence: true
+    group_by_sequence: false
     disallow_near_duplicates_cross_splits: true
 
 # Résolution et prétraitement

@@ -1,25 +1,36 @@
-# Configuration Modèle B : RT-DETR (Real-Time DEtection TRansformer)
+# RoadVision AI — RT-DETR Feasibility
+# Hardware: NVIDIA RTX 3070 8GB
+
 model:
   family: "rtdetr"
-  architecture: "rtdetr-l.pt" # ou rtdetr-r18 / rtdetr-r50
+  architecture: "rtdetr-l.pt"
   task: "detect"
   pretrained: true
   pretrained_weights: "rtdetr-l.pt"
 
 training:
-  imgsz: 640
-  epochs: 50
-  batch: 8 # Réduit par rapport à YOLO pour préserver la VRAM (~12-16 Go)
-  device: "cpu" # basculer sur "0" lors de l'exécution sur GPU
-  workers: 4
+  imgsz: 416
+  epochs: 2
+  batch: 1
+  device: 0
+  workers: 2
+
+  amp: true
+  seed: 42
+  deterministic: false
+  cache: false
+
+  freeze: 10
+
   optimizer: "AdamW"
-  lr0: 0.0001 # Taux d'apprentissage adapté aux transformers
+  lr0: 0.0001
   weight_decay: 0.0001
+
   patience: 15
   save: true
-  save_period: 5
+  save_period: -1
 
 validation:
-  conf: 0.25
+  conf: 0.001
   iou: 0.60
-  save_json: true
+  save_json: false
