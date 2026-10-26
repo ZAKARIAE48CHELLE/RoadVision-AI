@@ -1,0 +1,53 @@
+# Configuration générale du dataset RDD2022
+dataset_name: "RDD2022"
+description: "Road Damage Dataset 2022 pour la détection et classification de dégradations routières"
+source_url: "https://github.com/sekilab/RoadDamageDetector"
+
+# Chemins des répertoires (relatifs à la racine du projet)
+paths:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  splits_dir: "data/splits"
+  manifest: "data/splits/manifest.csv"
+
+# Classes officielles retenues et définitions
+classes:
+  0:
+    code: "D00"
+    name: "fissure_longitudinale"
+    en_name: "Longitudinal Crack"
+    description: "Fissure continue parallèle au sens de circulation"
+  1:
+    code: "D10"
+    name: "fissure_transversale"
+    en_name: "Transverse Crack"
+    description: "Fissure perpendiculaire au sens de circulation"
+  2:
+    code: "D20"
+    name: "fissuration_alligator"
+    en_name: "Alligator Crack"
+    description: "Réseau de fissures en maillage polygonal (faïençage)"
+  3:
+    code: "D40"
+    name: "nid_de_poule"
+    en_name: "Pothole"
+    description: "Cavité / trou dans la chaussée"
+
+num_classes: 4
+
+# Règles de séparation (splits)
+splits:
+  seed: 42
+  train_ratio: 0.70
+  val_ratio: 0.15
+  test_ratio: 0.15
+  stratification_strategy: "class_and_country_balanced"
+  leakage_prevention:
+    group_by_sequence: true
+    disallow_near_duplicates_cross_splits: true
+
+# Résolution et prétraitement
+image:
+  standard_size: [640, 640]
+  channels: 3
+  format: "RGB"

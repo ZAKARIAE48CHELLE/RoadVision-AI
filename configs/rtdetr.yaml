@@ -1,0 +1,25 @@
+# Configuration Modèle B : RT-DETR (Real-Time DEtection TRansformer)
+model:
+  family: "rtdetr"
+  architecture: "rtdetr-l.pt" # ou rtdetr-r18 / rtdetr-r50
+  task: "detect"
+  pretrained: true
+  pretrained_weights: "rtdetr-l.pt"
+
+training:
+  imgsz: 640
+  epochs: 50
+  batch: 8 # Réduit par rapport à YOLO pour préserver la VRAM (~12-16 Go)
+  device: "cpu" # basculer sur "0" lors de l'exécution sur GPU
+  workers: 4
+  optimizer: "AdamW"
+  lr0: 0.0001 # Taux d'apprentissage adapté aux transformers
+  weight_decay: 0.0001
+  patience: 15
+  save: true
+  save_period: 5
+
+validation:
+  conf: 0.25
+  iou: 0.60
+  save_json: true

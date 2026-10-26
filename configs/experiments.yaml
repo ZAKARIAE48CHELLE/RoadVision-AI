@@ -1,0 +1,42 @@
+# Protocole d'expérimentation globale et études d'ablation
+seed: 42
+splits_manifest: "data/splits/manifest.csv"
+
+# Règles de comparaison équitable
+fair_comparison:
+  identical_test_set: true
+  identical_val_set: true
+  identical_eval_metrics: true
+  imgsz_fixed: 640
+
+# Grille d'expériences prévues
+experiments:
+  - id: "EXP_01_BASELINE_ZERO_SHOT"
+    description: "Inférence zéro-shot avec détecteur générique sur images de test"
+    model: "yolo"
+  - id: "EXP_02_YOLO_STANDARD"
+    description: "Entraînement YOLOv8s sur train split avec augmentations standards"
+    model: "yolo"
+    config: "configs/yolo.yaml"
+  - id: "EXP_03_RTDETR_STANDARD"
+    description: "Entraînement RT-DETR sur train split (budget comparable)"
+    model: "rtdetr"
+    config: "configs/rtdetr.yaml"
+  - id: "EXP_04_ABLATION_AUGMENTATION"
+    description: "Ablation de la mosaïque et des augmentations géométriques (YOLO)"
+    model: "yolo"
+    overrides:
+      mosaic: 0.0
+      scale: 0.0
+  - id: "EXP_05_ABLATION_RESOLUTION"
+    description: "Impact de la résolution d'entrée (imgsz 480 vs 640)"
+    model: "yolo"
+    overrides:
+      imgsz: 480
+
+# Métriques cibles et critères de sélection
+selection_criteria:
+  primary_metric: "mAP50-95"
+  secondary_metric: "mAP50"
+  latency_constraint_ms: 100.0 # Latence max admissible pour application temps réel
+  pothole_recall_weight: 1.2 # Bonus sur le rappel des nids-de-poule (sécurité routière prioritaire)
